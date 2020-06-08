@@ -11,7 +11,7 @@
     <div class="container">
         <h2 class="text-center mt-4">Trade System</h2>
 
-        <form class="form" onsubmit="tradeCtrl.add(event)">
+        <form class="form" onsubmit="tradeCtrl.addTrade(event)">
             <div class="form-group">
                 <label>Data</label>
                 <input id="date" type="date" class="form-control" required autofocus>
@@ -50,6 +50,7 @@
 
     <script src="js/app/models/Trade.js"></script>
     <script src="js/app/controllers/TradeController.js"></script>
+    <script src="js/app/helpers/DateHelper.js"></script>
     <script>
         let tradeCtrl = new TradeController();
     </script>
