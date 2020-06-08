@@ -6,18 +6,25 @@ class TradeController {
         this._inputDate = $('#date');
         this._inputQuantity = $('#quantity');
         this._inputValue = $('#value');
-
         this._tradeList = new TradeList();
-        this._tradeView = new TradeView($('#tradeView'));
 
+        this._tradeView = new TradeView($('#tradeView'));
         this._tradeView.updateView(this._tradeList);
+
+        this._message = new Message();
+        this._messageView = new MessageView($('#messageView'));
+        this._messageView.updateView(this._message);
     }
 
     addTrade(event) {
         event.preventDefault();
 
         this._tradeList.addToList(this._createTradeObject());
+        this._message.message = 'Added Successfully!';
+
         this._tradeView.updateView(this._tradeList);
+        this._messageView.updateView(this._message);
+
         this._resetForm();
     }
 

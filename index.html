@@ -11,6 +11,8 @@
     <div class="container">
         <h2 class="text-center mt-4">Trade System</h2>
 
+        <div id="messageView"></div>
+
         <form class="form" onsubmit="tradeCtrl.addTrade(event)">
             <div class="form-group">
                 <label>Data</label>
@@ -39,10 +41,13 @@
     </div>
 
     <script src="js/app/models/Trade.js"></script>
+    <script src="js/app/models/Message.js"></script>
+    <script src="js/app/models/TradeList.js"></script>
     <script src="js/app/controllers/TradeController.js"></script>
     <script src="js/app/helpers/DateHelper.js"></script>
-    <script src="js/app/models/TradeList.js"></script>
+    <script src="js/app/views/View.js"></script>
     <script src="js/app/views/TradeView.js"></script>
+    <script src="js/app/views/MessageView.js"></script>
     <script>
         let tradeCtrl = new TradeController();
     </script>

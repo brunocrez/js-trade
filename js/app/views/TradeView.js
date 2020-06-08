@@ -1,12 +1,12 @@
-class TradeView {
+class TradeView extends View {
 
     constructor(element) {
-        this._element = element;
+        super(element);
     }
 
-    _renderTemplate(tradeList) {
+    renderTemplate(tradeList) {
             return `
-            <table class="table table-striped">
+            <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th scope="col">DATA</th>
@@ -27,11 +27,11 @@ class TradeView {
                         `
                     ).join('')}
                 </tbody>
+                <tfoot>
+                    <td colspan="3"></td>
+                    <td>${tradeList.list.reduce((current, next) => current + next.volume, 0)}</td>                    
+                </tfoot>
             </table>
         `;
-    }
-
-    updateView(tradeList) {
-        this._element.innerHTML = this._renderTemplate(tradeList);
     }
 }
