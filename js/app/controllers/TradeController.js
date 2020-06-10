@@ -7,21 +7,11 @@ class TradeController {
         this._inputQuantity = $('#quantity');
         this._inputValue = $('#value');
 
-        this._tradeList = ProxyFactory.createProxy(
-            new TradeList(), ['addToList', 'clearList'],
-            model => this._tradeView.updateView(model)
-        );
-
         this._tradeView = new TradeView($('#tradeView'));
-        this._tradeView.updateView(this._tradeList);
-
-        this._message = ProxyFactory.createProxy(
-            new Message(), 'message',
-            model => this._messageView.updateView(model)
-        );
+        this._tradeList = new Bind(new TradeList(), this._tradeView, 'addToList', 'clearList');
 
         this._messageView = new MessageView($('#messageView'));
-        this._messageView.updateView(this._message);
+        this._message = new Bind(new Message(), this._messageView, 'message');
     }
 
     addTrade(event) {
