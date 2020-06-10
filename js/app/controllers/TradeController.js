@@ -22,24 +22,18 @@ class TradeController {
     }
 
     importTrades() {
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:3000/trades');
 
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4) {
-                if (xhr.status == 200) {
-                    JSON.parse(xhr.responseText)
-                        .map(item => new Trade(new Date(item.date), item.quantity, item.value))
-                        .forEach(trade => this._tradeList.addToList(trade));
+        const service = new TradeService();
 
-                    this._message.message = 'Imported Successfully!';
-                } else {
-                    this._message.message = 'Something went wrong!';
-                }
+        service.getTrades((err, trades) => {
+            if (err) {
+                this._message.message = err;
+                return;
             }
-        };
 
-        xhr.send();
+            trades.forEach(trade => this._tradeList.addToList(trade));
+            this._message.message = 'Successfuly Imported!';
+        });
     }
 
     clearTrades() {
