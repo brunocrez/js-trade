@@ -21,6 +21,27 @@ class TradeController {
         this._resetForm();
     }
 
+    importTrades() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:3000/trades');
+
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    JSON.parse(xhr.responseText)
+                        .map(item => new Trade(new Date(item.date), item.quantity, item.value))
+                        .forEach(trade => this._tradeList.addToList(trade));
+
+                    this._message.message = 'Imported Successfully!';
+                } else {
+                    this._message.message = 'Something went wrong!';
+                }
+            }
+        };
+
+        xhr.send();
+    }
+
     clearTrades() {
         this._tradeList.clearList();
         this._message.message = 'List Cleared Successfully!';
