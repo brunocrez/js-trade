@@ -34,6 +34,8 @@ class TradeController {
                 trades
                     .reduce((newArr, arr) => newArr.concat(arr), [])
                     .forEach(item => this._tradeList.addToList(item));
+
+                this._message.message = 'Imported Successfully!';
             })
             .catch(err => this._message.message = err);
 
