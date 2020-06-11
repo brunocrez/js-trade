@@ -25,15 +25,18 @@ class TradeController {
 
         const service = new TradeService();
 
-        service.getTrades((err, trades) => {
-            if (err) {
-                this._message.message = err;
-                return;
-            }
+        Promise.all([
+                service.getTradesOnWeek(),
+                service.getTradesOnLastWeek(),
+                service.getTradesOnLastFourteenDays()
+            ])
+            .then(trades => {
+                trades
+                    .reduce((newArr, arr) => newArr.concat(arr), [])
+                    .forEach(item => this._tradeList.addToList(item));
+            })
+            .catch(err => this._message.message = err);
 
-            trades.forEach(trade => this._tradeList.addToList(trade));
-            this._message.message = 'Successfuly Imported!';
-        });
     }
 
     clearTrades() {
