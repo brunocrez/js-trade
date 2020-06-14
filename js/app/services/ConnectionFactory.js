@@ -1,9 +1,11 @@
 var ConnectionFactory = (function() {
 
-    var database_stores = ['trades'];
-    var database_version = 1;
-    var database_name = 'trade_system';
+    const database_stores = ['trades'];
+    const database_version = 1;
+    const database_name = 'trade_system';
+
     var connection = null;
+    var closeConnection = null;
 
     return class ConnectionFactory {
 
@@ -23,6 +25,10 @@ var ConnectionFactory = (function() {
                 openRequest.onsuccess = event => {
                     if (!connection) {
                         connection = event.target.result;
+                        closeConnection = connection.close.bind(connection);
+                        connection.close = function() {
+                            throw new Error('Cannot close connection!');
+                        }
                     }
 
                     resolve(connection);
@@ -43,6 +49,12 @@ var ConnectionFactory = (function() {
 
                 conn.createObjectStore(item, { autoIncrement: true });
             });
+        }
+
+        static closeConn() {
+            if (connection) {
+                closeConnection();
+            }
         }
     }
 })();
