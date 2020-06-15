@@ -39,26 +39,26 @@ class TradeController {
 
     importTrades() {
         const service = new TradeService();
-
-        Promise.all([
-                service.getTradesOnWeek(),
-                service.getTradesOnLastWeek(),
-                service.getTradesOnLastFourteenDays()
-            ])
-            .then(trades => {
-                trades
-                    .reduce((newArr, arr) => newArr.concat(arr), [])
-                    .forEach(item => this._tradeList.addToList(item));
-
-                this._message.message = 'Imported Successfully!';
-            })
+        service.getAllTrades()
+            .then(tradeList => tradeList.filter(item =>
+                !this._tradeList.list.some(existingItem =>
+                    JSON.stringify(existingItem) == JSON.stringify(item))))
+            .then(trades => trades.forEach(trade => {
+                this._tradeList.addToList(trade);
+                this._message.message = 'Item Imported Successfully!';
+            }))
             .catch(err => this._message.message = err);
-
     }
 
     clearTrades() {
-        this._tradeList.clearList();
-        this._message.message = 'List Cleared Successfully!';
+        ConnectionFactory.getConn()
+            .then(conn => new TradeDao(conn))
+            .then(obj => obj.clearAll())
+            .then(message => {
+                this._message.message = message;
+                this._tradeList.clearList();
+            })
+            .catch(message => this._message.message = message);
     }
 
     _createTradeObject() {

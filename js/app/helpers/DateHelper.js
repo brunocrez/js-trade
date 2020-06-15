@@ -13,6 +13,10 @@ class DateHelper {
     }
 
     static dateToString(date) {
-        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+        return `${date.getDate()}/${DateHelper.addZero(date.getMonth() + 1)}/${date.getFullYear()}`;
+    }
+
+    static addZero(n) {
+        return n < 10 ? '0' + n : n;
     }
 }

@@ -49,4 +49,22 @@ class TradeDao {
             };
         });
     }
+
+    clearAll() {
+        return new Promise((resolve, reject) => {
+            let cursor = this._conn
+                .transaction([this._store], 'readwrite')
+                .objectStore(this._store)
+                .clear();
+
+            cursor.onsuccess = event => {
+                resolve('Database cleared Successfully!');
+            };
+
+            cursor.onerror = event => {
+                console.log(event.target.error);
+                reject('Something went wrong trying to clear Database!');
+            };
+        });
+    }
 }

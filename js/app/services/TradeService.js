@@ -42,4 +42,20 @@ class TradeService {
                 })
         });
     }
+
+    getAllTrades() {
+        return Promise.all([
+                this.getTradesOnWeek(),
+                this.getTradesOnLastWeek(),
+                this.getTradesOnLastFourteenDays()
+            ])
+            .then(array => {
+                let flatArray = array
+                    .reduce((newArr, arr) => newArr.concat(arr), [])
+
+                return flatArray;
+            })
+            .catch(err => { throw new Error(err) });
+
+    }
 }
