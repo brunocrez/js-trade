@@ -13,11 +13,19 @@ class TradeController {
         this._messageView = new MessageView($('#messageView'));
         this._message = new Bind(new Message(), this._messageView, 'message');
 
+        this._init();
+    }
+
+    _init() {
         ConnectionFactory.getConn()
             .then(conn => new TradeDao(conn))
             .then(obj => obj.listAll())
             .then(tradeList => tradeList.forEach(trade => this._tradeList.addToList(trade)))
             .catch(err => this._message.message = err);
+
+        setInterval(() => {
+            this.importTrades();
+        }, 5000);
     }
 
     addTrade(event) {
@@ -45,7 +53,7 @@ class TradeController {
                     JSON.stringify(existingItem) == JSON.stringify(item))))
             .then(trades => trades.forEach(trade => {
                 this._tradeList.addToList(trade);
-                this._message.message = 'Item Imported Successfully!';
+                this._message.message = 'Items Imported Successfully!';
             }))
             .catch(err => this._message.message = err);
     }

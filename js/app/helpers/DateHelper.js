@@ -13,7 +13,7 @@ class DateHelper {
     }
 
     static dateToString(date) {
-        return `${date.getDate()}/${DateHelper.addZero(date.getMonth() + 1)}/${date.getFullYear()}`;
+        return `${DateHelper.addZero(date.getDate())}/${DateHelper.addZero(date.getMonth() + 1)}/${date.getFullYear()}`;
     }
 
     static addZero(n) {
