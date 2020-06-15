@@ -12,17 +12,32 @@ class TradeController {
 
         this._messageView = new MessageView($('#messageView'));
         this._message = new Bind(new Message(), this._messageView, 'message');
+
+        ConnectionFactory.getConn()
+            .then(conn => new TradeDao(conn))
+            .then(obj => obj.listAll())
+            .then(tradeList => tradeList.forEach(trade => this._tradeList.addToList(trade)))
+            .catch(err => this._message.message = err);
     }
 
     addTrade(event) {
         event.preventDefault();
-        this._tradeList.addToList(this._createTradeObject());
-        this._message.message = 'Added Successfully!';
-        this._resetForm();
+
+        ConnectionFactory.getConn()
+            .then(conn => {
+                const newTrade = this._createTradeObject()
+                new TradeDao(conn)
+                    .save(newTrade)
+                    .then(() => {
+                        this._tradeList.addToList(newTrade);
+                        this._message.message = 'Added Successfully!';
+                        this._resetForm();
+                    })
+            })
+            .catch(err => this._message.message = err);
     }
 
     importTrades() {
-
         const service = new TradeService();
 
         Promise.all([
@@ -49,8 +64,8 @@ class TradeController {
     _createTradeObject() {
         return new Trade(
             DateHelper.stringToDate(this._inputDate.value),
-            this._inputQuantity.value,
-            this._inputValue.value
+            parseInt(this._inputQuantity.value),
+            parseFloat(this._inputValue.value)
         );
     }
 
