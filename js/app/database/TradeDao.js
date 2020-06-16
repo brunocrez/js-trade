@@ -58,7 +58,7 @@ class TradeDao {
                 .clear();
 
             cursor.onsuccess = event => {
-                resolve('Database cleared Successfully!');
+                resolve('Database Cleared Successfully!');
             };
 
             cursor.onerror = event => {

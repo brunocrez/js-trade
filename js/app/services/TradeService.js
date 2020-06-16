@@ -58,4 +58,35 @@ class TradeService {
             .catch(err => { throw new Error(err) });
 
     }
+
+    addTrade(trade) {
+        return ConnectionFactory.getConn()
+            .then(conn => new TradeDao(conn))
+            .then(obj => obj.save(trade))
+            .then(() => 'Trade Added Successfully!')
+            .catch(err => {
+                console.log(err);
+                throw new Error('Something went wrong trying to create new Trade!');
+            });
+    }
+
+    listAllTrades() {
+        return ConnectionFactory.getConn()
+            .then(conn => new TradeDao(conn))
+            .then(obj => obj.listAll())
+            .catch(err => {
+                console.log(err);
+                throw new Error('Something went wrong trying to list Trades!');
+            });
+    }
+
+    clearAllTrades() {
+        return ConnectionFactory.getConn()
+            .then(conn => new TradeDao(conn))
+            .then(obj => obj.clearAll())
+            .catch(err => {
+                console.log(err);
+                throw new Error('Something went wrong trying to clear Trades!');
+            });
+    }
 }

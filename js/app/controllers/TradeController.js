@@ -13,41 +13,38 @@ class TradeController {
         this._messageView = new MessageView($('#messageView'));
         this._message = new Bind(new Message(), this._messageView, 'message');
 
+        this._tradeService = new TradeService();
         this._init();
     }
 
     _init() {
-        ConnectionFactory.getConn()
-            .then(conn => new TradeDao(conn))
-            .then(obj => obj.listAll())
+        new TradeService()
+            .listAllTrades()
             .then(tradeList => tradeList.forEach(trade => this._tradeList.addToList(trade)))
             .catch(err => this._message.message = err);
 
-        setInterval(() => {
-            this.importTrades();
-        }, 5000);
+        // setInterval(() => {
+        //     this.importTrades();
+        // }, 5000);
     }
 
     addTrade(event) {
         event.preventDefault();
+        const newTrade = this._createTradeObject();
 
-        ConnectionFactory.getConn()
-            .then(conn => {
-                const newTrade = this._createTradeObject()
-                new TradeDao(conn)
-                    .save(newTrade)
-                    .then(() => {
-                        this._tradeList.addToList(newTrade);
-                        this._message.message = 'Added Successfully!';
-                        this._resetForm();
-                    })
+        this._tradeService
+            .addTrade(newTrade)
+            .then(message => {
+                this._tradeList.addToList(newTrade);
+                this._message.message = message;
+                this._resetForm();
             })
             .catch(err => this._message.message = err);
     }
 
     importTrades() {
-        const service = new TradeService();
-        service.getAllTrades()
+        this._tradeService
+            .getAllTrades()
             .then(tradeList => tradeList.filter(item =>
                 !this._tradeList.list.some(existingItem =>
                     JSON.stringify(existingItem) == JSON.stringify(item))))
@@ -59,9 +56,8 @@ class TradeController {
     }
 
     clearTrades() {
-        ConnectionFactory.getConn()
-            .then(conn => new TradeDao(conn))
-            .then(obj => obj.clearAll())
+        this._tradeService
+            .clearAllTrades()
             .then(message => {
                 this._message.message = message;
                 this._tradeList.clearList();
