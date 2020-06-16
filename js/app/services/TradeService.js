@@ -89,4 +89,15 @@ class TradeService {
                 throw new Error('Something went wrong trying to clear Trades!');
             });
     }
+
+    importTrades(currentList) {
+        return this.getAllTrades()
+            .then(tradeList => tradeList.filter(item =>
+                !currentList.some(existingItem =>
+                    JSON.stringify(existingItem) == JSON.stringify(item))))
+            .catch(err => {
+                console.log(err);
+                throw new Error('Something went wrong trying to import Trades!')
+            });
+    }
 }

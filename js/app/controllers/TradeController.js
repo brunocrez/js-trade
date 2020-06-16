@@ -18,14 +18,14 @@ class TradeController {
     }
 
     _init() {
-        new TradeService()
+        this._tradeService
             .listAllTrades()
             .then(tradeList => tradeList.forEach(trade => this._tradeList.addToList(trade)))
             .catch(err => this._message.message = err);
 
-        // setInterval(() => {
-        //     this.importTrades();
-        // }, 5000);
+        setInterval(() => {
+            this.importTrades();
+        }, 5000);
     }
 
     addTrade(event) {
@@ -44,10 +44,7 @@ class TradeController {
 
     importTrades() {
         this._tradeService
-            .getAllTrades()
-            .then(tradeList => tradeList.filter(item =>
-                !this._tradeList.list.some(existingItem =>
-                    JSON.stringify(existingItem) == JSON.stringify(item))))
+            .importTrades(this._tradeList.list)
             .then(trades => trades.forEach(trade => {
                 this._tradeList.addToList(trade);
                 this._message.message = 'Items Imported Successfully!';
