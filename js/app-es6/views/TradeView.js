@@ -1,4 +1,7 @@
-class TradeView extends View {
+import { View } from './View';
+import { DateHelper } from '../helpers/DateHelper';
+
+export class TradeView extends View {
 
     constructor(element) {
         super(element);

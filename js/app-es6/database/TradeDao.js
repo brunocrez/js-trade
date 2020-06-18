@@ -1,4 +1,6 @@
-class TradeDao {
+import { Trade } from '../models/Trade';
+
+export class TradeDao {
 
     constructor(conn) {
         this._conn = conn;

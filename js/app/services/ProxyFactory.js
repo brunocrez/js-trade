@@ -1,47 +1,84 @@
 "use strict";
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+System.register([], function (_export, _context) {
+    "use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+    var _typeof, _createClass, ProxyFactory;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var ProxyFactory = function () {
-    function ProxyFactory() {
-        _classCallCheck(this, ProxyFactory);
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
     }
 
-    _createClass(ProxyFactory, null, [{
-        key: "createProxy",
-        value: function createProxy(obj, props, resolve) {
+    return {
+        setters: [],
+        execute: function () {
+            _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+                return typeof obj;
+            } : function (obj) {
+                return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+            };
 
-            return new Proxy(obj, {
-                get: function get(target, prop, receiver) {
-                    if (props.includes(prop) && ProxyFactory.isFunction(target[prop])) {
-                        return function () {
-                            Reflect.apply(target[prop], target, arguments);
-                            return resolve(target);
-                        };
+            _createClass = function () {
+                function defineProperties(target, props) {
+                    for (var i = 0; i < props.length; i++) {
+                        var descriptor = props[i];
+                        descriptor.enumerable = descriptor.enumerable || false;
+                        descriptor.configurable = true;
+                        if ("value" in descriptor) descriptor.writable = true;
+                        Object.defineProperty(target, descriptor.key, descriptor);
                     }
-                    return Reflect.get(target, prop, receiver);
-                },
-                set: function set(target, prop, value, receiver) {
-                    if (props.includes(prop)) {
-                        target[prop] = value;
-                        resolve(target);
-                    }
-
-                    return Reflect.set(target, prop, value, receiver);
                 }
-            });
-        }
-    }, {
-        key: "isFunction",
-        value: function isFunction(foo) {
-            return (typeof foo === "undefined" ? "undefined" : _typeof(foo)) == (typeof Function === "undefined" ? "undefined" : _typeof(Function));
-        }
-    }]);
 
-    return ProxyFactory;
-}();
+                return function (Constructor, protoProps, staticProps) {
+                    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+                    if (staticProps) defineProperties(Constructor, staticProps);
+                    return Constructor;
+                };
+            }();
+
+            _export("ProxyFactory", ProxyFactory = function () {
+                function ProxyFactory() {
+                    _classCallCheck(this, ProxyFactory);
+                }
+
+                _createClass(ProxyFactory, null, [{
+                    key: "createProxy",
+                    value: function createProxy(obj, props, resolve) {
+
+                        return new Proxy(obj, {
+                            get: function get(target, prop, receiver) {
+                                if (props.includes(prop) && ProxyFactory.isFunction(target[prop])) {
+                                    return function () {
+                                        Reflect.apply(target[prop], target, arguments);
+                                        return resolve(target);
+                                    };
+                                }
+                                return Reflect.get(target, prop, receiver);
+                            },
+                            set: function set(target, prop, value, receiver) {
+                                if (props.includes(prop)) {
+                                    target[prop] = value;
+                                    resolve(target);
+                                }
+
+                                return Reflect.set(target, prop, value, receiver);
+                            }
+                        });
+                    }
+                }, {
+                    key: "isFunction",
+                    value: function isFunction(foo) {
+                        return (typeof foo === "undefined" ? "undefined" : _typeof(foo)) == (typeof Function === "undefined" ? "undefined" : _typeof(Function));
+                    }
+                }]);
+
+                return ProxyFactory;
+            }());
+
+            _export("ProxyFactory", ProxyFactory);
+        }
+    };
+});
 //# sourceMappingURL=ProxyFactory.js.map

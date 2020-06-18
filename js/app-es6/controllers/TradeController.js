@@ -1,4 +1,13 @@
-class TradeController {
+import { Bind } from '../helpers/Bind';
+import { TradeView } from '../views/TradeView';
+import { MessageView } from '../views/MessageView';
+import { TradeService } from '../services/TradeService';
+import { Trade } from '../models/Trade';
+import { TradeList } from '../models/TradeList';
+import { Message } from '../models/Message';
+import { DateHelper } from '../helpers/DateHelper';
+
+export class TradeController {
 
     constructor() {
         let $ = document.querySelector.bind(document);
