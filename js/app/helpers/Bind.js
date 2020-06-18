@@ -1,10 +1,19 @@
-class Bind {
+"use strict";
 
-    constructor(model, view, ...props) {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-        const proxy = ProxyFactory.createProxy(model, props, model => view.updateView(model));
-        view.updateView(model);
+var Bind = function Bind(model, view) {
+    _classCallCheck(this, Bind);
 
-        return proxy;
+    for (var _len = arguments.length, props = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+        props[_key - 2] = arguments[_key];
     }
-}
+
+    var proxy = ProxyFactory.createProxy(model, props, function (model) {
+        return view.updateView(model);
+    });
+    view.updateView(model);
+
+    return proxy;
+};
+//# sourceMappingURL=Bind.js.map

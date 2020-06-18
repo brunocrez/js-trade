@@ -1,70 +1,82 @@
-class TradeDao {
+'use strict';
 
-    constructor(conn) {
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var TradeDao = function () {
+    function TradeDao(conn) {
+        _classCallCheck(this, TradeDao);
+
         this._conn = conn;
         this._store = 'trades';
     }
 
-    save(trade) {
-        return new Promise((resolve, reject) => {
-            let req = this._conn
-                .transaction([this._store], 'readwrite')
-                .objectStore(this._store)
-                .add(trade);
+    _createClass(TradeDao, [{
+        key: 'save',
+        value: function save(trade) {
+            var _this = this;
 
-            req.onsuccess = event => {
-                resolve();
-            };
+            return new Promise(function (resolve, reject) {
+                var req = _this._conn.transaction([_this._store], 'readwrite').objectStore(_this._store).add(trade);
 
-            req.onerror = event => {
-                console.log(event.target.error);
-                reject('Something went wrong while trying to add new object!');
-            };
-        });
-    }
+                req.onsuccess = function (event) {
+                    resolve();
+                };
 
-    listAll() {
-        return new Promise((resolve, reject) => {
-            let cursor = this._conn
-                .transaction([this._store], 'readwrite')
-                .objectStore(this._store)
-                .openCursor();
+                req.onerror = function (event) {
+                    console.log(event.target.error);
+                    reject('Something went wrong while trying to add new object!');
+                };
+            });
+        }
+    }, {
+        key: 'listAll',
+        value: function listAll() {
+            var _this2 = this;
 
-            let tradeList = [];
+            return new Promise(function (resolve, reject) {
+                var cursor = _this2._conn.transaction([_this2._store], 'readwrite').objectStore(_this2._store).openCursor();
 
-            cursor.onsuccess = event => {
-                let current = event.target.result;
-                if (current) {
-                    let data = current.value;
-                    tradeList.push(new Trade(data._date, data._quantity, data._value));
-                    current.continue();
-                } else {
-                    resolve(tradeList);
-                }
-            };
+                var tradeList = [];
 
-            cursor.onerror = event => {
-                console.log(event.target.error);
-                reject('Something went wrong trying to list trades!');
-            };
-        });
-    }
+                cursor.onsuccess = function (event) {
+                    var current = event.target.result;
+                    if (current) {
+                        var data = current.value;
+                        tradeList.push(new Trade(data._date, data._quantity, data._value));
+                        current.continue();
+                    } else {
+                        resolve(tradeList);
+                    }
+                };
 
-    clearAll() {
-        return new Promise((resolve, reject) => {
-            let cursor = this._conn
-                .transaction([this._store], 'readwrite')
-                .objectStore(this._store)
-                .clear();
+                cursor.onerror = function (event) {
+                    console.log(event.target.error);
+                    reject('Something went wrong trying to list trades!');
+                };
+            });
+        }
+    }, {
+        key: 'clearAll',
+        value: function clearAll() {
+            var _this3 = this;
 
-            cursor.onsuccess = event => {
-                resolve('Database Cleared Successfully!');
-            };
+            return new Promise(function (resolve, reject) {
+                var cursor = _this3._conn.transaction([_this3._store], 'readwrite').objectStore(_this3._store).clear();
 
-            cursor.onerror = event => {
-                console.log(event.target.error);
-                reject('Something went wrong trying to clear Database!');
-            };
-        });
-    }
-}
+                cursor.onsuccess = function (event) {
+                    resolve('Database Cleared Successfully!');
+                };
+
+                cursor.onerror = function (event) {
+                    console.log(event.target.error);
+                    reject('Something went wrong trying to clear Database!');
+                };
+            });
+        }
+    }]);
+
+    return TradeDao;
+}();
+//# sourceMappingURL=TradeDao.js.map
